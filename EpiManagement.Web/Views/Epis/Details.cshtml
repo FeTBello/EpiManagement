@@ -1,0 +1,91 @@
+@model EpiManagement.Web.Models.Epi
+
+@{
+    ViewData["Title"] = "Detalhes do EPI";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Nome:</label>
+                                <p class="form-control-plaintext">@Model.Nome</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">CA:</label>
+                                <p class="form-control-plaintext">@Model.CA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Categoria:</label>
+                                <p class="form-control-plaintext">@Model.Categoria</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Validade:</label>
+                                <p class="form-control-plaintext">@Model.Validade.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Status:</label>
+                                <p class="form-control-plaintext">
+                                    @if (Model.EstaVencido)
+                                    {
+                                        <span class="badge bg-danger fs-6">Vencido</span>
+                                    }
+                                    else if (Model.ProximoDoVencimento)
+                                    {
+                                        <span class="badge bg-warning text-dark fs-6">Próximo do Vencimento</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success fs-6">Válido</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Descricao))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Descrição:</label>
+                            <p class="form-control-plaintext">@Model.Descricao</p>
+                        </div>
+                    }
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a asp-action="Index" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-md-2">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Excluir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

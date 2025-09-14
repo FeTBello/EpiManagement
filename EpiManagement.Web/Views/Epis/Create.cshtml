@@ -1,0 +1,86 @@
+@model EpiManagement.Web.Models.Epi
+
+@{
+    ViewData["Title"] = "Criar EPI";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Nome" class="form-label"></label>
+                                    <input asp-for="Nome" class="form-control" />
+                                    <span asp-validation-for="Nome" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CA" class="form-label"></label>
+                                    <input asp-for="CA" class="form-control" />
+                                    <span asp-validation-for="CA" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Categoria" class="form-label"></label>
+                                    <select asp-for="Categoria" class="form-select">
+                                        <option value="">Selecione uma categoria</option>
+                                        <option value="Proteção da Cabeça">Proteção da Cabeça</option>
+                                        <option value="Proteção dos Olhos">Proteção dos Olhos</option>
+                                        <option value="Proteção das Mãos">Proteção das Mãos</option>
+                                        <option value="Proteção dos Pés">Proteção dos Pés</option>
+                                        <option value="Proteção Respiratória">Proteção Respiratória</option>
+                                        <option value="Proteção Auditiva">Proteção Auditiva</option>
+                                        <option value="Proteção do Corpo">Proteção do Corpo</option>
+                                        <option value="Proteção contra Quedas">Proteção contra Quedas</option>
+                                    </select>
+                                    <span asp-validation-for="Categoria" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Validade" class="form-label"></label>
+                                    <input asp-for="Validade" class="form-control" type="date" />
+                                    <span asp-validation-for="Validade" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Descricao" class="form-label"></label>
+                            <textarea asp-for="Descricao" class="form-control" rows="3" placeholder="Descrição opcional do EPI"></textarea>
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Salvar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
