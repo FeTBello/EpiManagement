@@ -1,19 +1,10 @@
-/*!
-  * Bootstrap v5.1.0 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
+
 import * as Popper from '@popperjs/core';
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/index.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 const MAX_UID = 1000000;
 const MILLISECONDS_MULTIPLIER = 1000;
-const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+const TRANSITION_END = 'transitionend';
 
 const toType = obj => {
   if (obj === null || obj === undefined) {
@@ -22,11 +13,7 @@ const toType = obj => {
 
   return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
 };
-/**
- * --------------------------------------------------------------------------
- * Public Util Api
- * --------------------------------------------------------------------------
- */
+
 
 
 const getUID = prefix => {
@@ -41,14 +28,12 @@ const getSelector = element => {
   let selector = element.getAttribute('data-bs-target');
 
   if (!selector || selector === '#') {
-    let hrefAttr = element.getAttribute('href'); // The only valid content that could double as a selector are IDs or classes,
-    // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
-    // `document.querySelector` will rightfully complain it is invalid.
-    // See https://github.com/twbs/bootstrap/issues/32273
+    let hrefAttr = element.getAttribute('href'); 
+
 
     if (!hrefAttr || !hrefAttr.includes('#') && !hrefAttr.startsWith('.')) {
       return null;
-    } // Just in case some CMS puts out a full URL with the anchor appended
+    } 
 
 
     if (hrefAttr.includes('#') && !hrefAttr.startsWith('#')) {
@@ -79,7 +64,7 @@ const getElementFromSelector = element => {
 const getTransitionDurationFromElement = element => {
   if (!element) {
     return 0;
-  } // Get transition-duration of the element
+  } 
 
 
   let {
@@ -87,11 +72,11 @@ const getTransitionDurationFromElement = element => {
     transitionDelay
   } = window.getComputedStyle(element);
   const floatTransitionDuration = Number.parseFloat(transitionDuration);
-  const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+  const floatTransitionDelay = Number.parseFloat(transitionDelay); 
 
   if (!floatTransitionDuration && !floatTransitionDelay) {
     return 0;
-  } // If multiple durations are defined, take the first
+  } 
 
 
   transitionDuration = transitionDuration.split(',')[0];
@@ -117,7 +102,6 @@ const isElement = obj => {
 
 const getElement = obj => {
   if (isElement(obj)) {
-    // it's a jQuery object or a node element
     return obj.jquery ? obj[0] : obj;
   }
 
@@ -167,7 +151,7 @@ const isDisabled = element => {
 const findShadowRoot = element => {
   if (!document.documentElement.attachShadow) {
     return null;
-  } // Can find the shadow root otherwise it'll return the document
+  } 
 
 
   if (typeof element.getRootNode === 'function') {
@@ -177,7 +161,7 @@ const findShadowRoot = element => {
 
   if (element instanceof ShadowRoot) {
     return element;
-  } // when we don't find a shadow root
+  } 
 
 
   if (!element.parentNode) {
@@ -188,18 +172,11 @@ const findShadowRoot = element => {
 };
 
 const noop = () => {};
-/**
- * Trick to restart an element's animation
- *
- * @param {HTMLElement} element
- * @return void
- *
- * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
- */
+
 
 
 const reflow = element => {
-  // eslint-disable-next-line no-unused-expressions
+
   element.offsetHeight;
 };
 
@@ -219,7 +196,6 @@ const DOMContentLoadedCallbacks = [];
 
 const onDOMContentLoaded = callback => {
   if (document.readyState === 'loading') {
-    // add listener on the first call when the document is in loading state
     if (!DOMContentLoadedCallbacks.length) {
       document.addEventListener('DOMContentLoaded', () => {
         DOMContentLoadedCallbacks.forEach(callback => callback());
@@ -237,7 +213,6 @@ const isRTL = () => document.documentElement.dir === 'rtl';
 const defineJQueryPlugin = plugin => {
   onDOMContentLoaded(() => {
     const $ = getjQuery();
-    /* istanbul ignore if */
 
     if ($) {
       const name = plugin.NAME;
@@ -288,19 +263,11 @@ const executeAfterTransition = (callback, transitionElement, waitForTransition =
     }
   }, emulatedDuration);
 };
-/**
- * Return the previous/next element of a list.
- *
- * @param {array} list    The list of elements
- * @param activeElement   The active element
- * @param shouldGetNext   Choose to get next or previous element
- * @param isCycleAllowed
- * @return {Element|elem} The proper element
- */
+
 
 
 const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed) => {
-  let index = list.indexOf(activeElement); // if the element does not exist in the list return an element depending on the direction and if cycle is allowed
+  let index = list.indexOf(activeElement); 
 
   if (index === -1) {
     return list[!shouldGetNext && isCycleAllowed ? list.length - 1 : 0];
@@ -316,22 +283,12 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
   return list[Math.max(0, Math.min(index, listLength - 1))];
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): dom/event-handler.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
 const stripNameRegex = /\..*/;
 const stripUidRegex = /::\d+$/;
-const eventRegistry = {}; // Events storage
+const eventRegistry = {}; 
 
 let uidEvent = 1;
 const customEvents = {
@@ -340,11 +297,7 @@ const customEvents = {
 };
 const customEventsRegex = /^(mouseenter|mouseleave)/i;
 const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
-/**
- * ------------------------------------------------------------------------
- * Private methods
- * ------------------------------------------------------------------------
- */
+
 
 function getUidEvent(element, uid) {
   return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
@@ -381,14 +334,13 @@ function bootstrapDelegationHandler(element, selector, fn) {
           event.delegateTarget = target;
 
           if (handler.oneOff) {
-            // eslint-disable-next-line unicorn/consistent-destructuring
             EventHandler.off(element, event.type, selector, fn);
           }
 
           return fn.apply(target, [event]);
         }
       }
-    } // To please ESLint
+    }
 
 
     return null;
@@ -430,8 +382,7 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
   if (!handler) {
     handler = delegationFn;
     delegationFn = null;
-  } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
-  // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+  } 
 
 
   if (customEventsRegex.test(originalTypeEvent)) {
@@ -492,7 +443,7 @@ function removeNamespacedHandlers(element, events, typeEvent, namespace) {
 }
 
 function getTypeEvent(event) {
-  // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
+
   event = event.replace(stripNameRegex, '');
   return customEvents[event] || event;
 }
@@ -517,7 +468,6 @@ const EventHandler = {
     const isNamespace = originalTypeEvent.startsWith('.');
 
     if (typeof originalHandler !== 'undefined') {
-      // Simplest case: handler is passed, remove that listener ONLY.
       if (!events || !events[typeEvent]) {
         return;
       }
@@ -574,7 +524,7 @@ const EventHandler = {
         bubbles,
         cancelable: true
       });
-    } // merge custom information in our event
+    } 
 
 
     if (typeof args !== 'undefined') {
@@ -605,18 +555,7 @@ const EventHandler = {
 
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): dom/data.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
 
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
 const elementMap = new Map();
 var Data = {
   set(element, key, instance) {
@@ -624,11 +563,9 @@ var Data = {
       elementMap.set(element, new Map());
     }
 
-    const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
-    // can be removed later when multiple key/instances are fine to be used
+    const instanceMap = elementMap.get(element); 
 
     if (!instanceMap.has(key) && instanceMap.size !== 0) {
-      // eslint-disable-next-line no-console
       console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
       return;
     }
@@ -650,7 +587,7 @@ var Data = {
     }
 
     const instanceMap = elementMap.get(element);
-    instanceMap.delete(key); // free up element references if there are no instances left for an element
+    instanceMap.delete(key); 
 
     if (instanceMap.size === 0) {
       elementMap.delete(element);
@@ -659,17 +596,7 @@ var Data = {
 
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): base-component.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const VERSION = '5.1.0';
 
@@ -696,7 +623,7 @@ class BaseComponent {
   _queueCallback(callback, element, isAnimated = true) {
     executeAfterTransition(callback, element, isAnimated);
   }
-  /** Static */
+
 
 
   static getInstance(element) {
@@ -725,12 +652,6 @@ class BaseComponent {
 
 }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/component-functions.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
 
 const enableDismissTrigger = (component, method = 'hide') => {
   const clickEvent = `click.dismiss${component.EVENT_KEY}`;
@@ -745,23 +666,13 @@ const enableDismissTrigger = (component, method = 'hide') => {
     }
 
     const target = getElementFromSelector(this) || this.closest(`.${name}`);
-    const instance = component.getOrCreateInstance(target); // Method argument is left, for Alert and only, as it doesn't implement the 'hide' method
+    const instance = component.getOrCreateInstance(target); 
 
     instance[method]();
   });
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): alert.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$d = 'alert';
 const DATA_KEY$c = 'bs.alert';
@@ -770,17 +681,13 @@ const EVENT_CLOSE = `close${EVENT_KEY$c}`;
 const EVENT_CLOSED = `closed${EVENT_KEY$c}`;
 const CLASS_NAME_FADE$5 = 'fade';
 const CLASS_NAME_SHOW$8 = 'show';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Alert extends BaseComponent {
-  // Getters
+
   static get NAME() {
     return NAME$d;
-  } // Public
+  } 
 
 
   close() {
@@ -795,7 +702,7 @@ class Alert extends BaseComponent {
     const isAnimated = this._element.classList.contains(CLASS_NAME_FADE$5);
 
     this._queueCallback(() => this._destroyElement(), this._element, isAnimated);
-  } // Private
+  } 
 
 
   _destroyElement() {
@@ -803,7 +710,7 @@ class Alert extends BaseComponent {
 
     EventHandler.trigger(this._element, EVENT_CLOSED);
     this.dispose();
-  } // Static
+  } 
 
 
   static jQueryInterface(config) {
@@ -823,34 +730,14 @@ class Alert extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 enableDismissTrigger(Alert, 'close');
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Alert to jQuery only if jQuery is present
- */
 
 defineJQueryPlugin(Alert);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): button.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$c = 'button';
 const DATA_KEY$b = 'bs.button';
@@ -859,11 +746,7 @@ const DATA_API_KEY$7 = '.data-api';
 const CLASS_NAME_ACTIVE$3 = 'active';
 const SELECTOR_DATA_TOGGLE$5 = '[data-bs-toggle="button"]';
 const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$b}${DATA_API_KEY$7}`;
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Button extends BaseComponent {
   // Getters
@@ -873,7 +756,7 @@ class Button extends BaseComponent {
 
 
   toggle() {
-    // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
+
     this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
   } // Static
 
@@ -889,11 +772,6 @@ class Button extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API$6, SELECTOR_DATA_TOGGLE$5, event => {
@@ -902,21 +780,11 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$6, SELECTOR_DATA_TOGGLE$5, event 
   const data = Button.getOrCreateInstance(button);
   data.toggle();
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Button to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(Button);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): dom/manipulator.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 function normalizeData(val) {
   if (val === 'true') {
     return true;
@@ -985,12 +853,7 @@ const Manipulator = {
 
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): dom/selector-engine.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 const NODE_TEXT = 3;
 const SelectorEngine = {
   find(selector, element = document.documentElement) {
@@ -1055,17 +918,7 @@ const SelectorEngine = {
 
 };
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): carousel.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$b = 'carousel';
 const DATA_KEY$a = 'bs.carousel';
@@ -1073,7 +926,7 @@ const EVENT_KEY$a = `.${DATA_KEY$a}`;
 const DATA_API_KEY$6 = '.data-api';
 const ARROW_LEFT_KEY = 'ArrowLeft';
 const ARROW_RIGHT_KEY = 'ArrowRight';
-const TOUCHEVENT_COMPAT_WAIT = 500; // Time for mouse compat events to fire after touch
+const TOUCHEVENT_COMPAT_WAIT = 500; 
 
 const SWIPE_THRESHOLD = 40;
 const Default$a = {
@@ -1132,11 +985,7 @@ const SELECTOR_DATA_SLIDE = '[data-bs-slide], [data-bs-slide-to]';
 const SELECTOR_DATA_RIDE = '[data-bs-ride="carousel"]';
 const POINTER_TYPE_TOUCH = 'touch';
 const POINTER_TYPE_PEN = 'pen';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Carousel extends BaseComponent {
   constructor(element, config) {
@@ -1155,7 +1004,7 @@ class Carousel extends BaseComponent {
     this._pointerEvent = Boolean(window.PointerEvent);
 
     this._addEventListeners();
-  } // Getters
+  } 
 
 
   static get Default() {
@@ -1164,7 +1013,7 @@ class Carousel extends BaseComponent {
 
   static get NAME() {
     return NAME$b;
-  } // Public
+  } 
 
 
   next() {
@@ -1172,8 +1021,6 @@ class Carousel extends BaseComponent {
   }
 
   nextWhenVisible() {
-    // Don't call next when the page isn't visible
-    // or the carousel or its parent isn't visible
     if (!document.hidden && isVisible(this._element)) {
       this.next();
     }
@@ -1237,7 +1084,7 @@ class Carousel extends BaseComponent {
     const order = index > activeIndex ? ORDER_NEXT : ORDER_PREV;
 
     this._slide(order, this._items[index]);
-  } // Private
+  } 
 
 
   _getConfig(config) {
@@ -1291,7 +1138,6 @@ class Carousel extends BaseComponent {
     };
 
     const move = event => {
-      // ensure swiping with one touch and not pinching
       this.touchDeltaX = event.touches && event.touches.length > 1 ? 0 : event.touches[0].clientX - this.touchStartX;
     };
 
@@ -1303,13 +1149,6 @@ class Carousel extends BaseComponent {
       this._handleSwipe();
 
       if (this._config.pause === 'hover') {
-        // If it's a touch-enabled device, mouseenter/leave are fired as
-        // part of the mouse compatibility events on first tap - the carousel
-        // would stop cycling until user tapped out of it;
-        // here, we listen for touchend, explicitly pause the carousel
-        // (as if it's the second time we tap on it, mouseenter compat event
-        // is NOT fired) and after a timeout (to allow for mouse compatibility
-        // events to fire) we explicitly restart cycling
         this.pause();
 
         if (this.touchTimeout) {
@@ -1441,7 +1280,6 @@ class Carousel extends BaseComponent {
     }
 
     if (!activeElement || !nextElement) {
-      // Some weirdness is happening, so we bail
       return;
     }
 
@@ -1513,7 +1351,7 @@ class Carousel extends BaseComponent {
     }
 
     return order === ORDER_PREV ? DIRECTION_RIGHT : DIRECTION_LEFT;
-  } // Static
+  } 
 
 
   static carouselInterface(element, config) {
@@ -1576,11 +1414,7 @@ class Carousel extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API$5, SELECTOR_DATA_SLIDE, Carousel.dataApiClickHandler);
@@ -1591,26 +1425,11 @@ EventHandler.on(window, EVENT_LOAD_DATA_API$2, () => {
     Carousel.carouselInterface(carousels[i], Carousel.getInstance(carousels[i]));
   }
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Carousel to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(Carousel);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): collapse.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$a = 'collapse';
 const DATA_KEY$9 = 'bs.collapse';
@@ -1638,11 +1457,7 @@ const WIDTH = 'width';
 const HEIGHT = 'height';
 const SELECTOR_ACTIVES = '.show, .collapsing';
 const SELECTOR_DATA_TOGGLE$4 = '[data-bs-toggle="collapse"]';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Collapse extends BaseComponent {
   constructor(element, config) {
@@ -1703,7 +1518,7 @@ class Collapse extends BaseComponent {
 
     if (this._config.parent) {
       const children = SelectorEngine.find(`.${CLASS_NAME_COLLAPSE} .${CLASS_NAME_COLLAPSE}`, this._config.parent);
-      actives = SelectorEngine.find(SELECTOR_ACTIVES, this._config.parent).filter(elem => !children.includes(elem)); // remove children if greater depth
+      actives = SelectorEngine.find(SELECTOR_ACTIVES, this._config.parent).filter(elem => !children.includes(elem)); 
     }
 
     const container = SelectorEngine.findOne(this._selector);
@@ -1824,7 +1639,7 @@ class Collapse extends BaseComponent {
       ...Manipulator.getDataAttributes(this._element),
       ...config
     };
-    config.toggle = Boolean(config.toggle); // Coerce string values
+    config.toggle = Boolean(config.toggle); 
 
     config.parent = getElement(config.parent);
     typeCheckConfig(NAME$a, config, DefaultType$9);
@@ -1864,7 +1679,7 @@ class Collapse extends BaseComponent {
 
       elem.setAttribute('aria-expanded', isOpen);
     });
-  } // Static
+  } 
 
 
   static jQueryInterface(config) {
@@ -1888,15 +1703,9 @@ class Collapse extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API$4, SELECTOR_DATA_TOGGLE$4, function (event) {
-  // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
   if (event.target.tagName === 'A' || event.delegateTarget && event.delegateTarget.tagName === 'A') {
     event.preventDefault();
   }
@@ -1909,26 +1718,10 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$4, SELECTOR_DATA_TOGGLE$4, functi
     }).toggle();
   });
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Collapse to jQuery only if jQuery is present
- */
 
 defineJQueryPlugin(Collapse);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): dropdown.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$9 = 'dropdown';
 const DATA_KEY$8 = 'bs.dropdown';
@@ -1939,7 +1732,7 @@ const SPACE_KEY = 'Space';
 const TAB_KEY$1 = 'Tab';
 const ARROW_UP_KEY = 'ArrowUp';
 const ARROW_DOWN_KEY = 'ArrowDown';
-const RIGHT_MOUSE_BUTTON = 2; // MouseEvent.button value for the secondary button, usually the right button
+const RIGHT_MOUSE_BUTTON = 2; 
 
 const REGEXP_KEYDOWN = new RegExp(`${ARROW_UP_KEY}|${ARROW_DOWN_KEY}|${ESCAPE_KEY$2}`);
 const EVENT_HIDE$4 = `hide${EVENT_KEY$8}`;
@@ -1980,11 +1773,7 @@ const DefaultType$8 = {
   popperConfig: '(null|object|function)',
   autoClose: '(boolean|string)'
 };
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Dropdown extends BaseComponent {
   constructor(element, config) {
@@ -2027,16 +1816,13 @@ class Dropdown extends BaseComponent {
       return;
     }
 
-    const parent = Dropdown.getParentFromElement(this._element); // Totally disable Popper for Dropdowns in Navbar
+    const parent = Dropdown.getParentFromElement(this._element); 
 
     if (this._inNavbar) {
       Manipulator.setDataAttribute(this._menu, 'popper', 'none');
     } else {
       this._createPopper(parent);
-    } // If this is a touch-enabled device we add extra
-    // empty mouseover listeners to the body's immediate children;
-    // only needed because of broken event delegation on iOS
-    // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
+    } 
 
 
     if ('ontouchstart' in document.documentElement && !parent.closest(SELECTOR_NAVBAR_NAV)) {
@@ -2088,9 +1874,7 @@ class Dropdown extends BaseComponent {
 
     if (hideEvent.defaultPrevented) {
       return;
-    } // If this is a touch-enabled device we remove the extra
-    // empty mouseover listeners we added for iOS support
-
+    } 
 
     if ('ontouchstart' in document.documentElement) {
       [].concat(...document.body.children).forEach(elem => EventHandler.off(elem, 'mouseover', noop));
@@ -2118,7 +1902,6 @@ class Dropdown extends BaseComponent {
     typeCheckConfig(NAME$9, config, this.constructor.DefaultType);
 
     if (typeof config.reference === 'object' && !isElement(config.reference) && typeof config.reference.getBoundingClientRect !== 'function') {
-      // Popper virtual elements require a getBoundingClientRect method
       throw new TypeError(`${NAME$9.toUpperCase()}: Option "reference" provided type "object" without a required "getBoundingClientRect" method.`);
     }
 
@@ -2167,7 +1950,7 @@ class Dropdown extends BaseComponent {
 
     if (parentDropdown.classList.contains(CLASS_NAME_DROPSTART)) {
       return PLACEMENT_LEFT;
-    } // We need to trim the value because custom properties can also include spaces
+    } 
 
 
     const isEnd = getComputedStyle(this._menu).getPropertyValue('--bs-position').trim() === 'end';
@@ -2213,7 +1996,7 @@ class Dropdown extends BaseComponent {
           offset: this._getOffset()
         }
       }]
-    }; // Disable Popper if we have a static display
+    }; 
 
     if (this._config.display === 'static') {
       defaultBsPopperConfig.modifiers = [{
@@ -2235,8 +2018,7 @@ class Dropdown extends BaseComponent {
 
     if (!items.length) {
       return;
-    } // if target isn't included in items (e.g. when expanding the dropdown)
-    // allow cycling to get the last item in case key equals ARROW_UP_KEY
+    } 
 
 
     getNextActiveElement(items, target, key === ARROW_DOWN_KEY, !items.includes(target)).focus();
@@ -2287,7 +2069,7 @@ class Dropdown extends BaseComponent {
 
         if (composedPath.includes(context._element) || context._config.autoClose === 'inside' && !isMenuTarget || context._config.autoClose === 'outside' && isMenuTarget) {
           continue;
-        } // Tab navigation through the dropdown menu or events from contained inputs shouldn't close the menu
+        } 
 
 
         if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) {
@@ -2308,13 +2090,7 @@ class Dropdown extends BaseComponent {
   }
 
   static dataApiKeydownHandler(event) {
-    // If not input/textarea:
-    //  - And not a key in REGEXP_KEYDOWN => not a dropdown command
-    // If input/textarea:
-    //  - If space key => not a dropdown command
-    //  - If key is other than escape
-    //    - If key is not up or down => not a dropdown command
-    //    - If trigger inside the menu => not a dropdown command
+
     if (/input|textarea/i.test(event.target.tagName) ? event.key === SPACE_KEY || event.key !== ESCAPE_KEY$2 && (event.key !== ARROW_DOWN_KEY && event.key !== ARROW_UP_KEY || event.target.closest(SELECTOR_MENU)) : !REGEXP_KEYDOWN.test(event.key)) {
       return;
     }
@@ -2356,11 +2132,7 @@ class Dropdown extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(document, EVENT_KEYDOWN_DATA_API, SELECTOR_DATA_TOGGLE$3, Dropdown.dataApiKeydownHandler);
@@ -2371,21 +2143,11 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$3, SELECTOR_DATA_TOGGLE$3, functi
   event.preventDefault();
   Dropdown.getOrCreateInstance(this).toggle();
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Dropdown to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(Dropdown);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/scrollBar.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top';
 const SELECTOR_STICKY_CONTENT = '.sticky-top';
 
@@ -2403,10 +2165,10 @@ class ScrollBarHelper {
   hide() {
     const width = this.getWidth();
 
-    this._disableOverFlow(); // give padding to element to balance the hidden scrollbar width
+    this._disableOverFlow();
 
 
-    this._setElementAttributes(this._element, 'paddingRight', calculatedValue => calculatedValue + width); // trick: We adjust positive paddingRight and negative marginRight to sticky-top elements to keep showing fullwidth
+    this._setElementAttributes(this._element, 'paddingRight', calculatedValue => calculatedValue + width); 
 
 
     this._setElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight', calculatedValue => calculatedValue + width);
@@ -2484,19 +2246,12 @@ class ScrollBarHelper {
 
 }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/backdrop.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 const Default$7 = {
   className: 'modal-backdrop',
   isVisible: true,
-  // if false, we use the backdrop helper without adding any element to the dom
   isAnimated: false,
   rootElement: 'body',
-  // give the choice to place backdrop under different elements
   clickCallback: null
 };
 const DefaultType$7 = {
@@ -2570,7 +2325,7 @@ class Backdrop {
   _getConfig(config) {
     config = { ...Default$7,
       ...(typeof config === 'object' ? config : {})
-    }; // use getElement() with the default "body" to get a fresh Element on each instantiation
+    }; 
 
     config.rootElement = getElement(config.rootElement);
     typeCheckConfig(NAME$8, config, DefaultType$7);
@@ -2608,15 +2363,8 @@ class Backdrop {
 
 }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/focustrap.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
 const Default$6 = {
   trapElement: null,
-  // The element to trap focus inside of
   autofocus: true
 };
 const DefaultType$6 = {
@@ -2653,7 +2401,7 @@ class FocusTrap {
       trapElement.focus();
     }
 
-    EventHandler.off(document, EVENT_KEY$7); // guard against infinite focus loop
+    EventHandler.off(document, EVENT_KEY$7);
 
     EventHandler.on(document, EVENT_FOCUSIN$1, event => this._handleFocusin(event));
     EventHandler.on(document, EVENT_KEYDOWN_TAB, event => this._handleKeydown(event));
@@ -2667,7 +2415,7 @@ class FocusTrap {
 
     this._isActive = false;
     EventHandler.off(document, EVENT_KEY$7);
-  } // Private
+  } 
 
 
   _handleFocusin(event) {
@@ -2711,17 +2459,7 @@ class FocusTrap {
 
 }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): modal.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$6 = 'modal';
 const DATA_KEY$6 = 'bs.modal';
@@ -2756,11 +2494,6 @@ const CLASS_NAME_STATIC = 'modal-static';
 const SELECTOR_DIALOG = '.modal-dialog';
 const SELECTOR_MODAL_BODY = '.modal-body';
 const SELECTOR_DATA_TOGGLE$2 = '[data-bs-toggle="modal"]';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
 
 class Modal extends BaseComponent {
   constructor(element, config) {
@@ -2880,7 +2613,6 @@ class Modal extends BaseComponent {
   _initializeBackDrop() {
     return new Backdrop({
       isVisible: Boolean(this._config.backdrop),
-      // 'static' option will be translated to true, and booleans will keep their value
       isAnimated: this._isAnimated()
     });
   }
@@ -2906,7 +2638,6 @@ class Modal extends BaseComponent {
     const modalBody = SelectorEngine.findOne(SELECTOR_MODAL_BODY, this._dialog);
 
     if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
-      // Don't move modal's DOM position
       document.body.append(this._element);
     }
 
@@ -3026,7 +2757,7 @@ class Modal extends BaseComponent {
       scrollHeight,
       style
     } = this._element;
-    const isModalOverflowing = scrollHeight > document.documentElement.clientHeight; // return if the following background transition hasn't yet completed
+    const isModalOverflowing = scrollHeight > document.documentElement.clientHeight; 
 
     if (!isModalOverflowing && style.overflowY === 'hidden' || classList.contains(CLASS_NAME_STATIC)) {
       return;
@@ -3049,11 +2780,7 @@ class Modal extends BaseComponent {
     }, this._dialog);
 
     this._element.focus();
-  } // ----------------------------------------------------------------------
-  // the following methods are used to handle overflowing modals
-  // ----------------------------------------------------------------------
-
-
+  }
   _adjustDialog() {
     const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
 
@@ -3093,11 +2820,7 @@ class Modal extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API$2, SELECTOR_DATA_TOGGLE$2, function (event) {
@@ -3109,7 +2832,7 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$2, SELECTOR_DATA_TOGGLE$2, functi
 
   EventHandler.one(target, EVENT_SHOW$3, showEvent => {
     if (showEvent.defaultPrevented) {
-      // only register focus restorer if modal will actually get shown
+
       return;
     }
 
@@ -3123,26 +2846,10 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$2, SELECTOR_DATA_TOGGLE$2, functi
   data.toggle(this);
 });
 enableDismissTrigger(Modal);
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Modal to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(Modal);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): offcanvas.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
 
 const NAME$5 = 'offcanvas';
 const DATA_KEY$5 = 'bs.offcanvas';
@@ -3170,11 +2877,7 @@ const EVENT_HIDDEN$2 = `hidden${EVENT_KEY$5}`;
 const EVENT_CLICK_DATA_API$1 = `click${EVENT_KEY$5}${DATA_API_KEY$2}`;
 const EVENT_KEYDOWN_DISMISS = `keydown.dismiss${EVENT_KEY$5}`;
 const SELECTOR_DATA_TOGGLE$1 = '[data-bs-toggle="offcanvas"]';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Offcanvas extends BaseComponent {
   constructor(element, config) {
@@ -3344,11 +3047,7 @@ class Offcanvas extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API$1, SELECTOR_DATA_TOGGLE$1, function (event) {
@@ -3363,11 +3062,11 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$1, SELECTOR_DATA_TOGGLE$1, functi
   }
 
   EventHandler.one(target, EVENT_HIDDEN$2, () => {
-    // focus on trigger when it is closed
+
     if (isVisible(this)) {
       this.focus();
     }
-  }); // avoid conflict when clicking a toggler of an offcanvas, while another is open
+  }); 
 
   const allReadyOpen = SelectorEngine.findOne(OPEN_SELECTOR);
 
@@ -3380,34 +3079,17 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$1, SELECTOR_DATA_TOGGLE$1, functi
 });
 EventHandler.on(window, EVENT_LOAD_DATA_API$1, () => SelectorEngine.find(OPEN_SELECTOR).forEach(el => Offcanvas.getOrCreateInstance(el).show()));
 enableDismissTrigger(Offcanvas);
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- */
+
 
 defineJQueryPlugin(Offcanvas);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): util/sanitizer.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
+
 const uriAttrs = new Set(['background', 'cite', 'href', 'itemtype', 'longdesc', 'poster', 'src', 'xlink:href']);
 const ARIA_ATTRIBUTE_PATTERN = /^aria-[\w-]*$/i;
-/**
- * A pattern that recognizes a commonly useful subset of URLs that are safe.
- *
- * Shoutout to Angular 7 https://github.com/angular/angular/blob/7.2.4/packages/core/src/sanitization/url_sanitizer.ts
- */
+
 
 const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^#&/:?]*(?:[#/?]|$))/i;
-/**
- * A pattern that matches safe data URLs. Only matches image, video and audio types.
- *
- * Shoutout to Angular 7 https://github.com/angular/angular/blob/7.2.4/packages/core/src/sanitization/url_sanitizer.ts
- */
+
 
 const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
 
@@ -3422,7 +3104,7 @@ const allowedAttribute = (attr, allowedAttributeList) => {
     return true;
   }
 
-  const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); // Check if a regular expression validates the attribute.
+  const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); 
 
   for (let i = 0, len = regExp.length; i < len; i++) {
     if (regExp[i].test(attrName)) {
@@ -3434,7 +3116,6 @@ const allowedAttribute = (attr, allowedAttributeList) => {
 };
 
 const DefaultAllowlist = {
-  // Global attributes allowed on any supplied element below.
   '*': ['class', 'dir', 'id', 'lang', 'role', ARIA_ATTRIBUTE_PATTERN],
   a: ['target', 'href', 'title', 'rel'],
   area: [],
@@ -3501,17 +3182,7 @@ function sanitizeHtml(unsafeHtml, allowList, sanitizeFn) {
   return createdDocument.body.innerHTML;
 }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): tooltip.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$4 = 'tooltip';
 const DATA_KEY$4 = 'bs.tooltip';
@@ -3587,11 +3258,7 @@ const TRIGGER_HOVER = 'hover';
 const TRIGGER_FOCUS = 'focus';
 const TRIGGER_CLICK = 'click';
 const TRIGGER_MANUAL = 'manual';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Tooltip extends BaseComponent {
   constructor(element, config) {
@@ -3739,10 +3406,7 @@ class Tooltip extends BaseComponent {
 
     if (customClass) {
       tip.classList.add(...customClass.split(' '));
-    } // If this is a touch-enabled device we add extra
-    // empty mouseover listeners to the body's immediate children;
-    // only needed because of broken event delegation on iOS
-    // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
+    } 
 
 
     if ('ontouchstart' in document.documentElement) {
@@ -3801,8 +3465,7 @@ class Tooltip extends BaseComponent {
       return;
     }
 
-    tip.classList.remove(CLASS_NAME_SHOW$2); // If this is a touch-enabled device we remove the extra
-    // empty mouseover listeners we added for iOS support
+    tip.classList.remove(CLASS_NAME_SHOW$2); 
 
     if ('ontouchstart' in document.documentElement) {
       [].concat(...document.body.children).forEach(element => EventHandler.off(element, 'mouseover', noop));
@@ -3853,7 +3516,7 @@ class Tooltip extends BaseComponent {
     if (!content && templateElement) {
       templateElement.remove();
       return;
-    } // we use append for html objects to maintain js events
+    } 
 
 
     this.setElementContent(templateElement, content);
@@ -3865,7 +3528,7 @@ class Tooltip extends BaseComponent {
     }
 
     if (isElement(content)) {
-      content = getElement(content); // content is a DOM node or a jQuery
+      content = getElement(content); 
 
       if (this._config.html) {
         if (content.parentNode !== element) {
@@ -4136,9 +3799,7 @@ class Tooltip extends BaseComponent {
       if (this.constructor.Default[key] !== this._config[key]) {
         config[key] = this._config[key];
       }
-    } // In the future can be replaced with:
-    // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
-    // `Object.fromEntries(keysWithDifferentValues)`
+    } 
 
 
     return config;
@@ -4190,27 +3851,12 @@ class Tooltip extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Tooltip to jQuery only if jQuery is present
- */
+
 
 
 defineJQueryPlugin(Tooltip);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): popover.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$3 = 'popover';
 const DATA_KEY$3 = 'bs.popover';
@@ -4240,11 +3886,7 @@ const Event$1 = {
 };
 const SELECTOR_TITLE = '.popover-header';
 const SELECTOR_CONTENT = '.popover-body';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Popover extends Tooltip {
   // Getters
@@ -4300,27 +3942,11 @@ class Popover extends Tooltip {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Popover to jQuery only if jQuery is present
- */
 
 
 defineJQueryPlugin(Popover);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): scrollspy.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$2 = 'scrollspy';
 const DATA_KEY$2 = 'bs.scrollspy';
@@ -4351,11 +3977,7 @@ const SELECTOR_DROPDOWN$1 = '.dropdown';
 const SELECTOR_DROPDOWN_TOGGLE$1 = '.dropdown-toggle';
 const METHOD_OFFSET = 'offset';
 const METHOD_POSITION = 'position';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class ScrollSpy extends BaseComponent {
   constructor(element, config) {
@@ -4526,36 +4148,17 @@ class ScrollSpy extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(window, EVENT_LOAD_DATA_API, () => {
   SelectorEngine.find(SELECTOR_DATA_SPY).forEach(spy => new ScrollSpy(spy));
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .ScrollSpy to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(ScrollSpy);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): tab.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME$1 = 'tab';
 const DATA_KEY$1 = 'bs.tab';
@@ -4577,11 +4180,7 @@ const SELECTOR_ACTIVE_UL = ':scope > li > .active';
 const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]';
 const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
 const SELECTOR_DROPDOWN_ACTIVE_CHILD = ':scope > .dropdown-menu .active';
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Tab extends BaseComponent {
   // Getters
@@ -4715,11 +4314,7 @@ class Tab extends BaseComponent {
   }
 
 }
-/**
- * ------------------------------------------------------------------------
- * Data Api implementation
- * ------------------------------------------------------------------------
- */
+
 
 
 EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
@@ -4734,26 +4329,11 @@ EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (
   const data = Tab.getOrCreateInstance(this);
   data.show();
 });
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Tab to jQuery only if jQuery is present
- */
+
 
 defineJQueryPlugin(Tab);
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.1.0): toast.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-/**
- * ------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------
- */
+
 
 const NAME = 'toast';
 const DATA_KEY = 'bs.toast';
@@ -4767,7 +4347,7 @@ const EVENT_HIDDEN = `hidden${EVENT_KEY}`;
 const EVENT_SHOW = `show${EVENT_KEY}`;
 const EVENT_SHOWN = `shown${EVENT_KEY}`;
 const CLASS_NAME_FADE = 'fade';
-const CLASS_NAME_HIDE = 'hide'; // @deprecated - kept here only for backwards compatibility
+const CLASS_NAME_HIDE = 'hide';
 
 const CLASS_NAME_SHOW = 'show';
 const CLASS_NAME_SHOWING = 'showing';
@@ -4781,11 +4361,7 @@ const Default = {
   autohide: true,
   delay: 5000
 };
-/**
- * ------------------------------------------------------------------------
- * Class Definition
- * ------------------------------------------------------------------------
- */
+
 
 class Toast extends BaseComponent {
   constructor(element, config) {
@@ -4833,7 +4409,7 @@ class Toast extends BaseComponent {
       this._maybeScheduleHide();
     };
 
-    this._element.classList.remove(CLASS_NAME_HIDE); // @deprecated
+    this._element.classList.remove(CLASS_NAME_HIDE); 
 
 
     reflow(this._element);
@@ -4857,7 +4433,7 @@ class Toast extends BaseComponent {
     }
 
     const complete = () => {
-      this._element.classList.add(CLASS_NAME_HIDE); // @deprecated
+      this._element.classList.add(CLASS_NAME_HIDE);
 
 
       this._element.classList.remove(CLASS_NAME_SHOWING);
@@ -4964,14 +4540,8 @@ class Toast extends BaseComponent {
 }
 
 enableDismissTrigger(Toast);
-/**
- * ------------------------------------------------------------------------
- * jQuery
- * ------------------------------------------------------------------------
- * add .Toast to jQuery only if jQuery is present
- */
 
 defineJQueryPlugin(Toast);
 
 export { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip };
-//# sourceMappingURL=bootstrap.esm.js.map
+

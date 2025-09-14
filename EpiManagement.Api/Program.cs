@@ -3,14 +3,13 @@ using EpiManagement.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Container.
 builder.Services.AddControllers();
 
-// Configure Entity Framework
+//Entity Framework
 builder.Services.AddDbContext<EpiDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -21,7 +20,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -34,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Use CORS
+//CORS
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
@@ -43,7 +42,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created
+//database 
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<EpiDbContext>();

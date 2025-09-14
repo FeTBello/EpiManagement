@@ -2,10 +2,10 @@ using EpiManagement.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Container.
 builder.Services.AddControllersWithViews();
 
-// Configure HttpClient for API
+//HttpClient
 builder.Services.AddHttpClient<EpiApiService>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:5000/");
@@ -14,11 +14,10 @@ builder.Services.AddHttpClient<EpiApiService>(client =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

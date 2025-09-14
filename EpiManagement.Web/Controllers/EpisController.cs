@@ -13,7 +13,6 @@ namespace EpiManagement.Web.Controllers
             _apiService = apiService;
         }
 
-        // GET: Epis
         public async Task<IActionResult> Index(string? nome, int? ca)
         {
             var epis = await _apiService.GetEpisAsync(nome, ca);
@@ -26,7 +25,6 @@ namespace EpiManagement.Web.Controllers
             return View(viewModel);
         }
 
-        // GET: Epis/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var epi = await _apiService.GetEpiAsync(id);
@@ -37,13 +35,11 @@ namespace EpiManagement.Web.Controllers
             return View(epi);
         }
 
-        // GET: Epis/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Epis/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Epi epi)
@@ -64,7 +60,6 @@ namespace EpiManagement.Web.Controllers
             return View(epi);
         }
 
-        // GET: Epis/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var epi = await _apiService.GetEpiAsync(id);
@@ -75,7 +70,6 @@ namespace EpiManagement.Web.Controllers
             return View(epi);
         }
 
-        // POST: Epis/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Epi epi)
@@ -101,7 +95,6 @@ namespace EpiManagement.Web.Controllers
             return View(epi);
         }
 
-        // GET: Epis/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var epi = await _apiService.GetEpiAsync(id);
@@ -112,7 +105,6 @@ namespace EpiManagement.Web.Controllers
             return View(epi);
         }
 
-        // POST: Epis/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -129,7 +121,6 @@ namespace EpiManagement.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Epis/Dashboard
         public async Task<IActionResult> Dashboard()
         {
             var dashboard = await _apiService.GetDashboardMetricsAsync();
