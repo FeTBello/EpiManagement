@@ -170,13 +170,6 @@ EpiManagement/
 - ✅ **Tratamento de erros** adequado
 - ✅ **Configurações flexíveis** para diferentes ambientes
 
-## 📈 Métricas do Projeto
-
-### Linhas de Código
-- **Backend**: ~800 linhas
-- **Frontend**: ~1200 linhas
-- **Total**: ~2000 linhas
-
 ### Arquivos Criados
 - **Controllers**: 2 (API + MVC)
 - **Models**: 6 (Entidades + DTOs + ViewModels)
